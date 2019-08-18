@@ -1,0 +1,23 @@
+[{
+    "LocalObservationDateTime": "2019-08-17T22:51:00+08:00",
+    "EpochTime": 1566053460,
+    "WeatherText": "Partly cloudy",
+    "WeatherIcon": 35,
+    "HasPrecipitation": false,
+    "PrecipitationType": null,
+    "IsDayTime": false,
+    "Temperature": {
+        "Metric": {
+            "Value": 28.9,
+            "Unit": "C",
+            "UnitType": 17
+        },
+        "Imperial": {
+            "Value": 84,
+            "Unit": "F",
+            "UnitType": 18
+        }
+    },
+    "MobileLink": "http://m.accuweather.com/en/ph/manila/264885/current-weather/264885?lang=en-us",
+    "Link": "http://www.accuweather.com/en/ph/manila/264885/current-weather/264885?lang=en-us"
+}]

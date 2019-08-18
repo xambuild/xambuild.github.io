@@ -1,0 +1,817 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Consuming RESTful Web Service in your Xamarin.Forms Application</title>
+    <meta name="description" content="On this blog, I'll show how we've consumed data from AccuWeather and used it to create a simple Weather Application using Xamarin.Forms.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="https://xambuild.github.io/images/xambuild_logo.png">
+    <link rel="shortcut icon" href="https://xambuild.github.io/images/xambuild_logo.png">
+
+    <meta property="og:url" content="https://xambuild.github.io/consuming-restful-web-service-in-your-xamarin-application.html" />
+    <meta property="og:type" content="blog" />
+    <meta property="og:title" content="Consuming RESTful Web Service in your Xamarin.Forms Application" />
+    <meta property="og:description" content="On this blog, I'll show how we've consumed data from AccuWeather and used it to create a simple Weather Application using Xamarin.Forms." />
+    <meta property="og:image" content="https://xambuild.github.io/images/restful.png" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
+    <link rel="stylesheet" href="assets/css/cs-skin-elastic.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
+    <link href="https://cdn.jsdelivr.net/npm/chartist@0.11.0/dist/chartist.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/jqvmap@1.5.1/dist/jqvmap.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/weathericons@2.1.0/css/weather-icons.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@3.9.0/dist/fullcalendar.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="prettify/prettify.css" />
+
+    <script src="prettify/prettify.js"></script>
+
+
+
+    <style>
+        pre {
+            white-space: pre-wrap;
+            /* css-3 */
+            white-space: -moz-pre-wrap;
+            /* Mozilla */
+            white-space: -pre-wrap;
+            /* Opera 4-6 */
+            white-space: -o-pre-wrap;
+            /* Opera 7 */
+            word-wrap: break-word;
+            /* Internet Explorer 5.5+ */
+        }
+    </style>
+    <!-- <style type="text/css">
+        .gist {
+            width: 100% !important;
+            overflow: auto;
+        }
+
+        .gist-file .gist-data {
+            max-height: 500px;
+            max-width: 100%;
+            overflow: auto;
+        }
+    </style> -->
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145467692-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-145467692-1');
+    </script>
+
+
+</head>
+
+<body>
+    <!-- Left Panel -->
+    <aside id="left-panel" class="left-panel">
+        <nav class="navbar navbar-expand-sm navbar-default">
+            <div id="main-menu" class="main-menu collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index.html"><i class="menu-icon ti-rss"></i>BLOG </a>
+                    </li>
+
+                    <li>
+                        <a href="about.html"><i class="menu-icon ti-info-alt"></i></i>ABOUT </a>
+                    </li>
+
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </nav>
+    </aside>
+    <!-- /#left-panel -->
+    <!-- Right Panel -->
+    <div id="right-panel" class="right-panel">
+        <!-- Header-->
+        <header id="header" class="header" style="background-color: #FFF;">
+            <div class="top-left" style="background-color: #FFF; border-bottom: 1px solid #FFF">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="./"><img src="images/xambuild.png" alt="Logo"></a>
+                    <a class="navbar-brand hidden" href="./"><img src="images/xambuild.png" alt="Logo"></a>
+                    <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
+                </div>
+            </div>
+
+        </header>
+        <!-- /#header -->
+        <!-- Content -->
+        <div class="content">
+            <div class="animated fadeIn">
+
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="text-dark" style="font-weight: 600">Consuming RESTful Web Service in your Xamarin.Forms Application
+                        </h2>
+                        <p>by Cedric Gabrang • 08/10/2019</p>
+                        <br>
+                        <img height="auto" width="100%" style="max-width: 870px;" src="https://xambuild.github.io/images/restful.png"><br><br>
+                        <div style="max-width: 870px;">
+                            <h4 class="text-black">
+                                Last month, my friend, <strong>Mr. Bryan Anthony Garcia</strong>, who's a
+                                <strong>Microsoft MVP for Developer
+                                    Technologies</strong> invited me as one of the speakers of Mobile. NET Developers PH's (MONDPH) 1 whole day Xamarin Workshop to talk about <strong>RESTful Web Services +
+                                    Xamarin.Forms</strong>. The topic itself caught the attention of most of the attendees especially when we started creating our app step-by-step. We've created an app which basically consumes data from a web service
+                                and for this session we've used <strong><a target="_blank"
+                                        style="color: black" href="https://developer.accuweather.com/apis">AccuWeather
+                                        Locations API/Web
+                                        Service</a></strong>. At the end of our topic, we have this simple app which capable of searching different cities around the world and able to display it's current weather condition and temperature.
+                            </h4><br>
+
+                            <h4>So on this blog, I'll show how we've consumed data from AccuWeather and used it to create a simple Weather Application using Xamarin.Forms.</h4>
+
+                            <br><br>
+
+                            <h3 class="text-dark" style="font-weight: 600">What is RESTful Web Service?</h3><br>
+                            <h4 class="text-black">
+                                <strong>Web service</strong> is a standardized way or medium to propagate communication between the client and server applications on the World Wide Web.
+                            </h4>
+                            <br>
+                            <h4 class="text-black">
+                                <strong>REST</strong> is a way to access resources which lie in a particular server. For example, you could have a server that could be hosting a database with . All of these are an example of resources. If a client, say
+                                an application needs any of these resources, it has to send a request to the server to access these resources. Now REST defines a way on how these resources can be accessed.<br><br> Web service has to comply with few characteristics
+                                in order for it to be called <strong>RESTful</strong>. These characteristics below are also known as design principles which need to be followed when working with RESTful based services. <br><br>
+
+                                <strong>RESTFul Client-Server,&nbsp;</strong> it means that the server will have a RESTful web service which would provide the required functionality to the client. The client send's a request to the web service on the
+                                server.
+                                <br><br>
+
+                                <strong>Stateless,&nbsp;</strong>this concept means that the client session is stored on the client. The server is stateless means that every server can service any client at any time, there is no session affinity or sticky
+                                sessions. The relevant session information is stored on the client and passed to the server as needed.<br><br>
+
+                                <strong>Cache,&nbsp;</strong>refers to storing the server response in the client itself, so that a client need not make a server request for the same resource again and again.
+                                <br><br>
+
+                                <strong>Layered System,&nbsp;</strong>where you deploy the services on server A, and store data on server B and authenticate requests in Server C, for example. A client cannot ordinarily tell whether it is connected directly
+                                to the end server, or to an intermediary along the way. <br><br>
+
+                                <strong>Interface/Uniform Contract,&nbsp;</strong>RESTful basically works on the HTTP web layer and uses the below key verbs to work with resources on the server:
+                                <br><br>
+                            </h4>
+
+                            <ul style="padding-left: 50px">
+                                <li><strong>POST</strong> - To create a resource on the server</li>
+                                <li><strong>GET</strong> - To retrieve a resource from the server</li>
+                                <li><strong>PUT</strong> - To change the state of a resource or to update it</li>
+                                <li><strong>DELETE</strong> - To remove or delete a resource from the server</li>
+                            </ul>
+
+                            <br><br>
+
+                            <h3 class="text-dark" style="font-weight: 600">Then what is AccuWeather Locations Web Service?
+                            </h3>
+                            <br>
+                            <h4 class="text-black">The&nbsp;<a style="color: #00b5cc" href="https://developer.accuweather.com/"><strong>AccuWeather Locations Web
+                                        Service</strong></a> &nbsp;allows developers to get a location key corresponding with a given location. This key can be used to retrieve weather data from the
+                                <strong>AccuWeather
+                                    Forecast</strong> and <strong>Current Conditions</strong> APIs. AccuWeather is a company that provides highly accurate real-time weather information for 2.3 million locations around the
+                                world.
+                                <br><br> Here's an example of AccuWeather Locations web service call:
+                            </h4><br>
+
+                            <h4 class="text-dark" style="font-weight: 600">Resource URL</h4>
+                            <a href="http://dataservice.accuweather.com/locations/v1/cities/search?apikey=J30ZRfw8QYBfrgQWnDJYNOxpV8e8vx1O&q=manila%2C%20ph" style="font-family: 'Courier New', Courier, monospace; word-break: break-all; color: #f9690e">
+                                http://dataservice.accuweather.com/locations/v1/cities/search?apikey=J30ZRfw8QYBfrgQWnDJYNOxpV8e8vx1O&q=manila%2C%20ph
+                            </a><br><br>
+                            <h4 class="text-dark" style="font-weight: 600">Response</h4>
+
+                            <iframe src="https://xambuild.github.io/locations.json" style="width: 100%; height: 500px; margin-top: 5px">
+                            </iframe><br><br>
+
+
+                            <h3 class="text-dark" style="font-weight: 600">Try it yourself!
+                            </h3><br>
+                            <h4 class="text-black">First, register to&nbsp;<a target="_blank" href="https://developer.accuweather.com/apis" style="font-family: 'Courier New', Courier, monospace; word-break: break-all; color: #f9690e">https://developer.accuweather.com/apis</a>.
+                                Once you already have your account, sign it on then go to <strong>My Apps</strong>. Click on the <strong>Add a new App</strong> button then fill in the required details to get your AccuWeather API key. This key is your
+                                valid access to use the AccuWeather services.
+                            </h4><br>
+
+                            <picture>
+                                <source media="(min-width: 650px)" srcset="images/add_app_accuweather.png">
+                                <source media="(min-width: 465px)" srcset="images/add_app_accuweather_mobile.png">
+                                <img src="images/add_app_accuweather_mobile.png" alt="Add a new App">
+                            </picture><br><br>
+
+                            <h4>Now, go to <strong>API REFERENCE</strong> then select <strong>Locations API</strong>. Look for the <strong>City Search</strong> and key in your query parameters.</h4><br>
+
+                            <picture>
+                                <source media="(min-width: 650px)" srcset="images/city_search.png">
+                                <source media="(min-width: 465px)" srcset="images/city_search_mobile.png">
+                                <img src="images/city_search_mobile.png" alt="City Search">
+                            </picture><br><br>
+
+                            <h4>Now that you've learned about Web Services and explored AccuWeather Locations API/Web Service, let's go to our main objective.</h4><br><br>
+
+                            <h3 class="text-dark" style="font-weight: 600">Creating our app!
+                            </h3><br>
+
+                            <h4>First, in our Xamarin.Forms main project, let's create a <strong>ViewModel</strong> class named <strong>WeatherViewModel</strong> and inherit the
+                                <code>INotifyPropertyChanged</code> interface. </h4><br>
+
+                            <pre class="prettyprint" style="word-break: break-all;">
+class WeatherViewModel : INotifyPropertyChanged
+{
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected virtual void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+}
+</pre>
+
+                            <h4>Then let's initialize two static string variables. This will hold our API Key and our web service city URL.</h4><br>
+                            <pre class="prettyprint" style="word-break: break-all;">
+static string APIKey = "[PLACE YOUR API KEY HERE]";
+static string cityURL = "http://dataservice.accuweather.com/locations/v1/cities/";</pre><br>
+
+                            <h4>Now let's have these following variables and setters and getters. This will be later used to process and return web service data.</h4><br>
+                            <pre class="prettyprint" style="padding-left: 5px; word-break: break-all; height: 500px;">
+
+public string DisplayMessage
+{
+    get
+    {
+        if (string.IsNullOrEmpty(Key))
+        {
+            return "-";
+        }
+
+        else
+        {
+            return $"Location Key: {Key}" + Environment.NewLine + CityName + $" is located at {Region}, {Country}";
+        }
+        
+    }
+}
+
+string keyWord;
+public string Keyword
+{
+    get
+    {
+        return keyWord;
+    }
+
+    set
+    {
+        keyWord = value;
+        OnPropertyChanged("Keyword");
+    }
+}
+
+string key;
+public string Key
+{
+    get
+    {
+        return key;
+    }
+
+    set
+    {
+        key = value;
+        OnPropertyChanged("Key");
+    }
+}
+
+string cityName;
+public string CityName
+{
+    get
+    {
+        return cityName;
+    }
+
+    set
+    {
+        cityName = value;
+        OnPropertyChanged("CityName");
+    }
+}
+
+string region;
+public string Region
+{
+    get
+    {
+        return region;
+    }
+
+    set
+    {
+        region = value;
+        OnPropertyChanged("Region");
+    }
+}
+
+string country;
+public string Country
+{
+    get
+    {
+        return country;
+    }
+
+    set
+    {
+        country = value;
+        OnPropertyChanged("Country");
+    }
+}
+
+bool isBusy;
+public bool IsBusy
+{
+    get
+    {
+        return isBusy;
+    }
+
+    set
+    {
+        isBusy = value;
+        OnPropertyChanged("IsBusy");
+    }
+}
+                            </pre>
+
+                            <h4>Let's have the command interface right here to handle button event on search.</h4><br>
+                            <pre class="prettyprint" style="word-break: break-all;">
+public ICommand CitySearchCommand { get; set; }</pre><br>
+
+                            <h4>This time, we're going to actually create our method to handle the web service call and parsing of data. Create a method and name it <strong>CitySearch</strong>. For us to be able to use <code>JArray.Parse</code>, we've to
+                                install in our project the <strong>Newtonsoft.Json</strong> from NuGet Package Manager.</h4><br>
+                            <pre class="prettyprint" style="word-break: break-all;">
+private async void CitySearch()
+{
+    IsBusy = true;
+
+    var apiUri = cityURL + "search?apikey=" + APIKey + "&q=" + keyWord;
+
+    var httpClient = new System.Net.Http.HttpClient();
+    var httpResponse = await httpClient.GetAsync(apiUri);
+    var httpResult = httpResponse.Content.ReadAsStringAsync().Result;
+
+    var httpData = JArray.Parse(httpResult);
+
+    foreach(var data in httpData)
+    {
+        Key = (string)data["Key"];
+        CityName = (string)data["EnglishName"];
+
+        var region = (JObject)data["Region"];
+        Region = (string)region["EnglishName"];
+
+        var country = (JObject)data["Country"];
+        Country = (string)country["EnglishName"];
+
+        OnPropertyChanged(nameof(DisplayMessage));
+
+        break;
+    }
+
+    IsBusy = false;
+}</pre><br>
+
+                            <h4>Lastly, on <strong>WeatherViewModel</strong> main method, assign <code>CitySearch</code> method as the command parameter of the <code>CitySearchCommand</code>.</h4><br>
+                            <pre class="prettyprint" style="word-break: break-all;">
+public WeatherViewModel()
+{
+    CitySearchCommand = new Command(CitySearch);
+}</pre><br>
+
+                            <h4>And here's the entire <strong>WeatherViewModel</strong> class setup should look like.</h4><br>
+                            <pre class="prettyprint" style="word-break: break-all; height: 600px;">
+class WeatherViewModel : INotifyPropertyChanged
+{
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    static string APIKey = "[PLACE YOUR API KEY HERE]";
+    static string cityURL = "http://dataservice.accuweather.com/locations/v1/cities/";
+
+    public string DisplayMessage
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(Key))
+            {
+                return "-";
+            }
+
+            else
+            {
+                return $"Location Key: {Key}" + Environment.NewLine + CityName + $" is located at {Region}, {Country}";
+            }
+            
+        }
+    }
+
+    string keyWord;
+    public string Keyword
+    {
+        get
+        {
+            return keyWord;
+        }
+
+        set
+        {
+            keyWord = value;
+            OnPropertyChanged("Keyword");
+        }
+    }
+
+    string key;
+    public string Key
+    {
+        get
+        {
+            return key;
+        }
+
+        set
+        {
+            key = value;
+            OnPropertyChanged("Key");
+        }
+    }
+
+    string cityName;
+    public string CityName
+    {
+        get
+        {
+            return cityName;
+        }
+
+        set
+        {
+            cityName = value;
+            OnPropertyChanged("CityName");
+        }
+    }
+
+    string region;
+    public string Region
+    {
+        get
+        {
+            return region;
+        }
+
+        set
+        {
+            region = value;
+            OnPropertyChanged("Region");
+        }
+    }
+
+    string country;
+    public string Country
+    {
+        get
+        {
+            return country;
+        }
+
+        set
+        {
+            country = value;
+            OnPropertyChanged("Country");
+        }
+    }
+
+    bool isBusy;
+    public bool IsBusy
+    {
+        get
+        {
+            return isBusy;
+        }
+
+        set
+        {
+            isBusy = value;
+            OnPropertyChanged("IsBusy");
+        }
+    }
+
+    public ICommand CitySearchCommand { get; set; }
+
+    public WeatherViewModel()
+    {
+        CitySearchCommand = new Command(CitySearch);
+    }
+
+    private async void CitySearch()
+    {
+        IsBusy = true;
+
+        var apiUri = cityURL + "search?apikey=" + APIKey + "&q=" + keyWord;
+
+        var httpClient = new System.Net.Http.HttpClient();
+        var httpResponse = await httpClient.GetAsync(apiUri);
+        var httpResult = httpResponse.Content.ReadAsStringAsync().Result;
+
+        var httpData = JArray.Parse(httpResult);
+
+        foreach(var data in httpData)
+        {
+            Key = (string)data["Key"];
+            CityName = (string)data["EnglishName"];
+
+            var region = (JObject)data["Region"];
+            Region = (string)region["EnglishName"];
+
+            var country = (JObject)data["Country"];
+            Country = (string)country["EnglishName"];
+
+            OnPropertyChanged(nameof(DisplayMessage));
+
+            break;
+        }
+
+        IsBusy = false;
+    }
+
+    protected virtual void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new 
+            PropertyChangedEventArgs(propertyName));
+    }
+}</pre><br>
+
+                            <h4>That's enough for our ViewModel so far. Now, let's create our <strong>View</strong> (layout page). Add new <strong>XAML Content Page</strong> and name it <strong>MainPage. </strong >Let's add an <code>Entry</code> to accept user input and a <code>Button</code> to trigger the <code>CitySearchCommand</code>.
+                            The <code>ActivityIndicator </code> tells the user that "Hey! Wait for a second, I'm still searching!". Add <code>Label</code> control to display the city information.</h4><br>
+                            <pre class="prettyprint lang-xml" style="word-break: break-all">
+&lt;StackLayout Padding="10" Spacing="10"&gt;
+    &lt;StackLayout.BindingContext&gt;
+        &lt;Local:WeatherViewModel/&gt;
+    &lt;/StackLayout.BindingContext&gt;
+    
+    &lt;StackLayout Orientation="Horizontal"&gt;
+        
+        &lt;Entry Text="{Binding Keyword}"
+                Placeholder="Type here..."
+                HorizontalOptions="FillAndExpand"&gt;&lt;/Entry&gt;
+
+        &lt;Button Text="SEARCH"
+                Command="{Binding CitySearchCommand}"&gt;&lt;/Button&gt;
+
+    &lt;/StackLayout&gt;
+
+    &lt;ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"&gt;&lt;/ActivityIndicator&gt;
+
+    &lt;Label Text="City Information"
+                FontAttributes="Bold"
+                FontSize="Large"&gt;&lt;/Label&gt;
+
+    &lt;Label Text="{Binding DisplayMessage}"
+                FontSize="Medium"&gt;&lt;/Label&gt;
+
+&lt;/StackLayout&gt;</pre><br>
+
+
+                            <h3 style="font-weight: 600">Let's run it!</h3><br>
+                            <picture>
+                                    <source media="(min-width: 650px)" style="max-width: 250px;" srcset="images/restful/1.png">
+                                    <source media="(min-width: 465px)" style="max-width: 150px;" srcset="images/restful/1.png">
+                                    <img src="images/restful/1.png" style="height: auto;max-width: 250px;">
+                            </picture>
+
+                            <picture>
+                                    <source media="(min-width: 650px)" style="max-width: 250px;" srcset="images/restful/2.png">
+                                    <source media="(min-width: 465px)" style="max-width: 150px;" srcset="images/restful/2.png">
+                                    <img src="images/restful/2.png" style="height: auto;max-width: 250px;">
+                            </picture>
+
+                            <picture>
+                                    <source media="(min-width: 650px)" style="max-width: 250px;" srcset="images/restful/3.png">
+                                    <source media="(min-width: 465px)" style="max-width: 150px;" srcset="images/restful/3.png">
+                                    <img src="images/restful/3.png" style="height: auto;max-width: 250px;">
+                            </picture><br><br>
+                            
+                            <h4>At this point, our app is now capable of searching and able to display city's continent and country. 
+                                Now, we're going to identify the searched city's current weather condition and temperature by using other AccuWeather service. This time, we're going to use 
+                                <strong>AccuWeather Current Conditions</strong> web service. This service requires <strong>Location Key</strong> and <strong>API Key</strong> parameters.</h4><br>
+
+                            <h4 class="text-dark" style="font-weight: 600">Resource URL</h4>
+                            <a href="http://dataservice.accuweather.com/currentconditions/v1/264885?apikey=J30ZRfw8QYBfrgQWnDJYNOxpV8e8vx1O" style="font-family: 'Courier New', Courier, monospace; word-break: break-all; color: #f9690e">
+                                http://dataservice.accuweather.com/currentconditions/v1/264885?apikey=J30ZRfw8QYBfrgQWnDJYNOxpV8e8vx1O
+                            </a><br><br>
+
+                            <h4 class="text-dark" style="font-weight: 600">Response</h4>
+
+                            <iframe src="https://xambuild.github.io/conditions.json" style="width: 100%; height: 300px; margin-top: 5px">
+                            </iframe><br><br>
+
+                            <h4>To consume this data in our app, let's go back to our <strong>WeatherViewModel</strong> class and add a new string variable to hold the conditions web service's url.</h4><br>
+                            <pre class="prettyprint" style="word-break: break-all">
+static string conditionsURL = "http://dataservice.accuweather.com/currentconditions/v1/";</pre><br>
+                            <h4>And add the following string properties below:</h4><br>
+                            <pre class="prettyprint" style="word-break: break-all">
+public string DisplayWeatherMessage
+{
+    get
+    {
+        if (string.IsNullOrEmpty(WeatherText))
+        {
+            return "-";
+        }
+
+        else
+        {
+            return WeatherText + " " + Temperature;
+        }
+
+    }
+}
+
+string weatherText;
+public string WeatherText
+{
+    get
+    {
+        return weatherText;
+    }
+
+    set
+    {
+        weatherText = value;
+        OnPropertyChanged("WeatherText");
+    }
+}
+
+string temperature;
+public string Temperature
+{
+    get
+    {
+        return temperature;
+    }
+
+    set
+    {
+        temperature = value;
+        OnPropertyChanged("Temperature");
+    }
+}</pre><br>
+
+
+                            <h4>Let's create new method to handle the web service call and parsing of <strong>Current Conditions</strong> web service data. Name it as <code>CurrentCondition</code>.</h4><br>
+                            <pre class="prettyprint" style="word-break: break-all">
+private async void WeatherCondition()
+{
+    IsBusy = true;
+
+    var apiUri = conditionsURL + Key + "?apikey=" + APIKey;
+
+    var httpClient = new System.Net.Http.HttpClient();
+    var httpResponse = await httpClient.GetAsync(apiUri);
+    var httpResult = httpResponse.Content.ReadAsStringAsync().Result;
+
+    var httpData = JArray.Parse(httpResult);
+
+    foreach (var data in httpData)
+    {
+        WeatherText = (string)data["WeatherText"];
+
+        var temperature = (JObject)data["Temperature"];
+        var metric = (JObject)temperature["Metric"];
+
+        Temperature = (string)metric["Value"];
+        OnPropertyChanged(nameof(DisplayWeatherMessage));
+        break;
+    }
+
+    IsBusy = false;
+}</pre>
+
+
+                            <h4>This time, we've to modify our <code>CitySearch</code> method to call our newly created <code>WeatherCondition</code> method.</h4><br>
+                            <pre class="prettyprint" style="word-break: break-all">
+private async void CitySearch()
+{
+    IsBusy = true;
+
+    var apiUri = cityURL + "search?apikey=" + APIKey + "&q=" + keyWord;
+
+    var httpClient = new System.Net.Http.HttpClient();
+    var httpResponse = await httpClient.GetAsync(apiUri);
+    var httpResult = httpResponse.Content.ReadAsStringAsync().Result;
+
+    var httpData = JArray.Parse(httpResult);
+
+    foreach(var data in httpData)
+    {
+        Key = (string)data["Key"];
+        CityName = (string)data["EnglishName"];
+
+        var region = (JObject)data["Region"];
+        Region = (string)region["EnglishName"];
+
+        var country = (JObject)data["Country"];
+        Country = (string)country["EnglishName"];
+        OnPropertyChanged(nameof(DisplayMessage));
+
+        break;
+    }
+
+    IsBusy = false;
+
+    //PLACE THE WeatherCondition METHOD HERE
+    WeatherCondition();
+}</pre><br>
+
+                            <h4>We're going to edit our <strong>MainPage.xaml</strong> and we'll be adding new <code>Label</code> control to display weather condition message.</h4><br>
+                            <pre class="prettyprint lang-xml" style="word-break: break-all">
+&lt;Label Text="Weather Condition"
+    FontAttributes="Bold"
+    FontSize="Large"&gt;&lt;/Label&gt;
+
+&lt;Label Text="{Binding DisplayWeatherMessage}"
+    FontSize="Medium"&gt;&lt;/Label&gt;</pre><br>
+
+                            <h3 style="font-weight: 600">Let's run it one more time!</h3><br>
+                            <picture>
+                                <source media="(min-width: 650px)" style="max-width: 250px;" srcset="images/restful/1_1.png">
+                                <source media="(min-width: 465px)" style="max-width: 150px;" srcset="images/restful/1_1.png">
+                                <img src="images/restful/1_1.png" style="height: auto;max-width: 250px;">
+                            </picture>
+
+                            <picture>
+                                <source media="(min-width: 650px)" style="max-width: 250px;" srcset="images/restful/2_2.png">
+                                <source media="(min-width: 465px)" style="max-width: 150px;" srcset="images/restful/2_2.png">
+                                <img src="images/restful/2_2.png" style="height: auto;max-width: 250px;">
+                            </picture>
+
+                            <picture>
+                                <source media="(min-width: 650px)" style="max-width: 250px;" srcset="images/restful/3_3.png">
+                                <source media="(min-width: 465px)" style="max-width: 150px;" srcset="images/restful/3_3.png">
+                                <img src="images/restful/3_3.png" style="height: auto;max-width: 250px;">
+                            </picture><br><br>
+
+                            <h4>And I guess that's it! We're now able to search for a city, display it's information and it's current weather condition. The idea of consuming RESTful web service is to actually retrieve information from a specific data source
+                                via World Wide Web and taking advantage of it on how you're going to work with that information. <strong>AccuWeather</strong> is just one of the open-source third-party web services, you might want to research more web
+                                services available for you to practice more on this topic. You may also create your own web service and there are some good tutorials online as well.</h4><br>
+                            <h4>Here's the GitHub repo of this demo:</h4>
+                            <a href="https://github.com/xambuild/SimpleWeatherApp" style="font-family: 'Courier New', Courier, monospace; word-break: break-all; color: #f9690e">
+                                https://github.com/xambuild/SimpleWeatherApp
+                                </a><br><br>
+
+                            <h4>Until next time! Happy Xamarin.Forms coding!</h4><br>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <!-- /.content -->
+
+        </div>
+
+        <div class="clearfix"></div>
+
+        <!-- /#right-panel -->
+
+        <!-- Scripts -->
+        <script>
+            prettyPrint();
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
+        <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
