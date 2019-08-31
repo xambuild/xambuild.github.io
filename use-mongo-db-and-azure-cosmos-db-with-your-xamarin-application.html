@@ -10,16 +10,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Use MongoDB and Azure Cosmos DB With Your Xamarin.Forms Application</title>
-    <meta name="description" content="On this blog, we're going to talk about on how to create your Xamarin.Forms application using MongoDB. We’ll query data using LINQ, insert, and delete data.">
+    <meta name="description" content="On this blog, we're going to talk about on how to create your Xamarin app using MongoDB. We’ll query data using LINQ, insert, and delete data.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- <link rel="apple-touch-icon" href="https://xambuild.github.io/images/xambuild_logo.png">
-    <link rel="shortcut icon" href="https://xambuild.github.io/images/xambuild_logo.png"> -->
 
     <meta property="og:url" content="https://xambuild.github.io/use-mongo-db-and-azure-cosmos-db-with-your-xamarin-application.html" />
     <meta property="og:type" content="blog" />
     <meta property="og:title" content="Use MongoDB and Azure Cosmos DB With Your Xamarin.Forms Application" />
-    <meta property="og:description" content="On this blog, we're going to talk about on how to create your Xamarin.Forms application using MongoDB. We’ll query data using LINQ, insert, and delete data." />
+    <meta property="og:description" content="On this blog, we're going to talk about on how to create your Xamarin app using MongoDB. We’ll query data using LINQ, insert, and delete data." />
     <meta property="og:image" content="https://xambuild.github.io/images/mongodb.png" />
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
@@ -28,20 +26,26 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
+
     <link rel="stylesheet" href="assets/css/cs-skin-elastic.css">
     <link rel="stylesheet" href="assets/css/style.css">
-    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
-    <link href="https://cdn.jsdelivr.net/npm/chartist@0.11.0/dist/chartist.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/jqvmap@1.5.1/dist/jqvmap.min.css" rel="stylesheet">
 
-    <link href="https://cdn.jsdelivr.net/npm/weathericons@2.1.0/css/weather-icons.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@3.9.0/dist/fullcalendar.min.css" rel="stylesheet" />
 
-    <link rel="stylesheet" href="prettify/desert.css" />
+
+    <link rel="stylesheet" href="prettify/prettify.css" />
 
     <script src="prettify/prettify.js"></script>
 
-
+    <style type="text/css">
+        .gist {
+            width: 580px !important;
+        }
+        
+        .gist-file .gist-data {
+            max-height: 320px;
+            max-width: 580px;
+        }
+    </style>
 
     <style>
         pre {
@@ -59,12 +63,24 @@
     </style>
 
 
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145467692-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
 
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-145467692-1');
+    </script> -->
 
 
 </head>
 
 <body>
+    <!-- Left Panel -->
     <aside id="left-panel" class="left-panel">
         <nav class="navbar navbar-expand-sm navbar-default">
             <div id="main-menu" class="main-menu collapse navbar-collapse">
@@ -82,7 +98,8 @@
             <!-- /.navbar-collapse -->
         </nav>
     </aside>
-
+    <!-- /#left-panel -->
+    <!-- Right Panel -->
     <div id="right-panel" class="right-panel">
         <!-- Header-->
         <header id="header" class="header" style="background-color: #FFF;">
@@ -95,21 +112,22 @@
             </div>
 
         </header>
-
+        <!-- /#header -->
+        <!-- Content -->
         <div class="content">
             <div class="animated fadeIn">
 
                 <div class="card">
                     <div class="card-body">
-                        <h3 class="text-dark" style="font-weight: 600">Use MongoDB and Azure Cosmos DB With Your Xamarin.Forms Application
+                        <h3 class="text-dark" style="font-weight: 600; max-width: 870px;">Use MongoDB and Azure Cosmos DB With Your Xamarin.Forms Application
                         </h3>
-                        <p style="color: black">by<a target="_blank" style="color: black" href="https://www.linkedin.com/in/cedric-gabrang"> Cedric Gabrang</a> • Aug 10th 2019</p>
+                        <p style="color: black">by<a target="_blank" style="color: black" href="https://www.linkedin.com/in/cedric-gabrang"> Cedric Gabrang</a> • Aug 28th 2019</p>
                         <br>
                         <img height="auto" width="100%" style="max-width: 820px;" src="images/mongodb.png"><br><br>
                         <div style="max-width: 870px;">
                             <h4 class="text-black" style="text-align: justify">
-                                Recently, I've attended a 2-day blockchain seminar + workshop and I found it interesting especially on how it deals with data storing. Well, we're not going to talk about blockchain or bitcoin stuffs right here. I just got caught with blockchain technology
-                                uses MongoDB as their database system and with that, I wondered if MongoDB could be also relevant to Xamarin.Forms.
+                                Recently, I've attended a 2-day blockchain seminar + workshop and I found it interesting especially on how it deals with data storing. Well, we're not going to talk about blockchain or bitcoin stuffs right here. I just got caught with the fact that blockchain
+                                technology uses MongoDB as their database system and with that, I wondered if MongoDB could be also integrated with Xamarin.Forms.
                             </h4><br>
 
                             <h4 style="text-align: justify">Now, on this blog, we're going to talk about on how to create your Xamarin app using MongoDB. We’ll query data using LINQ, insert, and delete data.</h4>
@@ -118,23 +136,282 @@
 
                             <br><br>
 
-                            <h3 class="text-dark" style="font-weight: 600">What is MongoDB? ?</h3><br>
+                            <h3 class="text-dark" style="font-weight: 600">What is MongoDB?</h3><br>
 
                             <h4 class="text-black" style="text-align: justify">
                                 <strong>&quot;The database for modern applications&quot;</strong>, as <a style="color: #4daf7c;text-decoration: underline" href="https://www.mongodb.com/">www.mongodb.com</a> stated on their official site, is a general
                                 purpose, document-based, distributed database built for modern application developers and for the cloud era. MongoDB is classified as a NoSQL database program, which means, it is a document database and stores data in JSON-like
-                                documents but use a variant called Binary JSON (BSON) that accommodates more data types and it has been popular in the Node.js community for a while.
+                                documents but use a variant called Binary JSON (BSON) that accommodates more data types and it has been popular in the Node.js community for a while. Instead of using tables and rows as in relational databases, the MongoDB
+                                architecture is made up of collections and documents.
                             </h4><br>
 
-                            <iframe src="https://xambuild.github.io/employees.json" style="width: 100%; height: 300px; margin-top: 5px">
-                            </iframe><br><br>
+                            <h4 style="text-align: justify">By using the <strong>Azure Cosmos DB's API</strong> for MongoDB, you can enjoy the benefits of the MongoDB you're used to.</h4><br>
+
+                            <h3 class="text-dark" style="font-weight: 600">What is Azure Cosmos DB?</h3><br>
+                            <h4 style="text-align: justify">Azure Cosmos DB is a fully managed cloud database. With just a few clicks you can configure a database that is 100% compatible with the MongoDB. It implements wire protocols of common NoSQL databases. By providing a native
+                                implementation of the wire protocols directly and efficiently inside Cosmos DB, it allows existing client SDKs, drivers, and tools of the NoSQL databases to interact with Cosmos DB transparently. Despite the popularity
+                                of MongoDB for Node.js solution, a fully supported and maintained driver for .NET exists. The driver is implemented in .NET Standard which means it is compatible with multiple platforms, including Xamarin.</h4><br>
+
+                            <h3 class="text-dark" style="font-weight: 600">Set Up the Environment</h3><br>
+                            <h4>For this demo, our MongoDB will be hosted in Azure Cosmos DB. First, to get your instance of Azure Cosmos DB set up and ready to use, sign in your Microsoft account to <a style="text-decoration: blue underline; color: blue"
+                                    target="_blank" href="https://portal.azure.com">Azure Portal</a>. Go to <strong>Azure Cosmos DB</strong> blade and click on the <strong>Add</strong> button.</h4><br>
+                            <picture>
+                                <source media="(min-width: 650px)" srcset="images/mongodb/1.png">
+                                <source media="(min-width: 465px)" srcset="images/mongodb/1_1.png">
+                                <img style="height: 100%" width="100%" src="images/mongodb/1_1.png">
+                            </picture><br><br>
+
+                            <h4>In the <strong>Create Azure Cosmos DB Account</strong> page, enter the settings for the new Azure Cosmos DB account. Select <strong>Review + Create</strong>. You can skip the <strong>Network</strong> and <strong>Tags</strong>                                section. The account creation takes a few minutes. </h4><br>
+                            <img style="height: 100%" width="95%" src="images/mongodb/2.png"><br><br><br>
+
+                            <h3 class="text-dark" style="font-weight: 600">Connect to MongoDB</h3><br>
+                            <h4 style="text-align: justify">Next, our app needs to connect to the MongoDB. First, we have to obtain our connection string. In the left pane, click <strong>Connection String</strong>. The <strong>Connection String</strong> blade opens, it has all the information
+                                necessary to connect to the account by using a driver for MongoDB, including a preconstructed connection string.</h4><br>
+
+                            <img src="images/mongodb/3.PNG" style="height: 100%; width: 95%"><br><br>
+
+                            <h3 class="text-dark" style="font-weight: 600">Let's create our app!</h3><br>
+
+                            <h4 style="text-align: justify"> The <strong>MongoDB.NET</strong> library enables the communication between Xamarin apps and the MongoDB. Search for <strong>MongoDB.Driver</strong> using the NuGet Package Manager in Visual Studio or Visual Studio for Mac and
+                                add that library to all of your projects.<br><br> Now, let's create our collection. On this demo, let's use Technical Event sessions as our sample collection. To do that, create a class and name it <strong>TechEventsModel</strong>                                and the following attributes:
+                            </h4><br>
+
+                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
+[BsonId, BsonRepresentation(BsonType.ObjectId)]
+public string Id { get; set; }
+
+[BsonElement("eventName")]
+public string Event { get; set; }
+
+[BsonElement("eventLocation")]
+public string Location { get; set; }
+
+[BsonElement("eventDateTime")]
+public string When { get; set; }</pre>
+
+                            <h4>The <code>[BsonId]</code> attribute specifies which property on the class should be used as the unique key or identifier for that document.</h4><br>
+
+                            <h4 style="text-align: justify">Next, let's create a <strong>ViewModel</strong> class named <strong>TechEventsViewModel</strong> and inherit the
+                                <code>INotifyPropertyChanged</code> interface. Initialize the following variables as indicated below:</h4><br>
+
+                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
+class TechEventsViewModel : INotifyPropertyChanged
+{
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    static IMongoCollection<TechEventsModel> mongoCollection;
+    readonly static string dbName = "BlogDemo";
+    readonly static string collectionName = "TechEvents";
+    static MongoClient client;
+
+    private List&lt;TechEventsModel&gt; _techEventsList;
+    private TechEventsModel _techEventItem;
+
+    private string _location, _event, _when;
+
+    protected virtual void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+}</pre>
+
+                            <h4 style="text-align: justify">To read and write documents, our app will use the <code>IMongoCollection&lt;T&gt;</code> class. Use the <code>MongoClient</code> object to obtain a reference to the <code>IMongoDatabase</code>.</h4><br>
+
+                            <h4 style="text-align: justify">Let's now set up our connection and create our database and collection. Create a public <code>IMongoCollection&lt;T&gt;</code> property named <strong>MongoConnection</strong>.</h4><br>
+                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
+public IMongoCollection<TechEventsModel> MongoConnection
+{
+    get
+    {
+        if (client == null || techEventsCollection == null)
+        {
+            var connectionString = "[PLACE YOUR CONNECTION STRING HERE]";
+            MongoClientSettings settings = MongoClientSettings.FromUrl(
+                new MongoUrl(connectionString));
+
+            settings.SslSettings = new SslSettings { EnabledSslProtocols = SslProtocols.Tls12 };
+
+            client = new MongoClient(settings);
+            var db = client.GetDatabase(dbName);
+
+            var collectionSettings = new MongoCollectionSettings { ReadPreference = ReadPreference.Nearest };
+            mongoCollection = db.GetCollection<TechEventsModel>(collectionName, collectionSettings);
+        }
+
+        return mongoCollection;
+    }
+}</pre>
+
+                            <h4 style="text-align: justify">Next, let's add the following properties.
+                            </h4><br>
+                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
+public string Event
+{
+    get { return _event; }
+    set
+    {
+    _event = value;
+    OnPropertyChanged("Event");
+    }
+}
+
+public string Location
+{
+    get { return _location; }
+    set
+    {
+    _location = value;
+    OnPropertyChanged("Location");
+    }
+}
+
+public string When
+{
+    get { return _when; }
+    set
+    {
+    _when = value;
+    OnPropertyChanged("When");
+    }
+}
+
+public List&lt;TechEventsModel&gt; TechEventsList
+{
+    get { return _techEventsList; }
+    set
+    {
+
+        _techEventsList = value;
+        OnPropertyChanged("TechEventsList");
+    }
+}</pre>
+                            <h4 style="text-align: justify">On the same class, create a method named <strong>GetAllTechEvents</strong>. To add every document in our collection list looks like the following:
+                            </h4><br>
+                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
+public async void GetAllTechEvents()
+{
+    var allEvents = await MongoConnection
+        .Find(new BsonDocument())
+        .ToListAsync();
+
+    TechEventsList = new List&lt;TechEventsModel&gt;();
+    TechEventsList.AddRange(allEvents);
+}</pre>
+
+                            <h4 style="text-align: justify">It is important to query asynchronously to avoid blocking the UI thread and provide a better user experience.</h4><br>
+
+                            <h4 style="text-align: justify">On the other hand, let's have the <strong>InsertTechEvent</strong> method. Inserting data looks like this:</h4><br>
+                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
+var items = new TechEventsModel
+{
+    Event = Event,
+    Location = Location,
+    When = When,
+};
+
+await MongoConnection.InsertOneAsync(items);
+await Application.Current.MainPage.Navigation.PopAsync();</pre>
+
+
+                            <h4 style="text-align: justify">For us to have atleast 1 collection before we proceed, go to <strong>GetAllTechEvents</strong> method and apply the changes as indicated below:
+                            </h4>
+
+                            <br>
+                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
+public async void GetAllTechEvents()
+{
+    var allEvents = await MongoConnection
+        .Find(new BsonDocument())
+        .ToListAsync();
+
+        if (allEvents.Count == 0)
+        {
+            var items = new TechEventsModel
+            {
+                Event = "MONDPH Xamarin Workshop",
+                Location = "Microsoft Partners Philippines",
+                When = "08/31/2019"
+            };
+
+            await MongoConnection.InsertOneAsync(items);
+
+            allEvents = await MongoConnection
+            .Find(new BsonDocument())
+            .ToListAsync();
+        }
+
+    TechEventsList = new List<TechEventsModel>();
+    TechEventsList.AddRange(allEvents);
+}</pre>
+
+                            <h4 style="text-align: justify">All MongoDB services seems ready, let's have these services in use by creating a page to display the Tech Events collections list. Create a<strong> ContentPage</strong> named <strong>TechEventsListPage</strong>. Our page should
+                                like this:</h4><br>
+
+                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
+&lt;ContentPage.Content&gt;
+    &lt;ListView ItemsSource="{Binding TechEventsList}"
+        CachingStrategy="RecycleElement"&gt;
+        &lt;ListView.ItemTemplate&gt;
+            &lt;DataTemplate&gt;
+                &lt;TextCell Text="{Binding Event}" Detail="{Binding Location}"&gt;
+                &lt;/TextCell&gt;
+            &lt;/DataTemplate&gt;
+        &lt;/ListView.ItemTemplate&gt;
+    &lt;/ListView&gt;
+&lt;/ContentPage.Content&gt;
+</pre>
+
+                            <h4 style="text-align: justify">Let's indicate our <strong>BindingContext</strong> in our <strong>TechEventsListPage.cs</strong></h4><br>
+                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
+protected override void OnAppearing()
+{
+    base.OnAppearing();
+    BindingContext = new TechEventsViewModel();
+}</pre><br>
+
+                            <h3 class="text-dark" style="font-weight: 600">Let's run it!</h3><br>
+
+                            <picture>
+                                <source media="(min-width: 650px)" style="max-width: 250px;" srcset="images/mongodb/Screenshot_20190831-164631.jpg">
+                                <source media="(min-width: 465px)" style="max-width: 150px;" srcset="images/mongodb/Screenshot_20190831-164631.jpg">
+                                <img src="images/mongodb/Screenshot_20190831-164631.jpg" style="height: auto;max-width: 250px;">
+                            </picture><br><br>
+
+                            <h4 style="text-align: justify">As you've noticed, we just simply fetched the collection from Azure Cosmos DB. Now, let's take a look on how it was saved.</h4><br><br>
+
+                            <img src="images/mongodb/techevents_collection.PNG" style="height: auto;"><br><br>
+
+                            <h4 style="text-align: justify">
+                                Well, that's it on how to begin with using MongoDB and Azure Cosmos DB as your Xamarin app database. To learn more about Azure Cosmos DB APIs, you can find all of the code of our demo app in this GitHub repo: <a href="https://github.com/cedricgabrang/AzureCosmosDB"
+                                    style="font-family: 'Courier New', Courier, monospace; word-break: break-all; color: #f9690e">
+                                    https://github.com/cedricgabrang/AzureCosmosDB
+                                    </a>
+                            </h4>
+                            <br><br>
+                            <h4 style="text-align: justify">Until next time! Happy Xamarin coding!</h4>
 
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- /.content -->
+
         </div>
-    </div>
+
+        <div class="clearfix"></div>
+
+        <!-- /#right-panel -->
+
+        <!-- Scripts -->
+        <script>
+            prettyPrint();
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
+        <script src="assets/js/main.js"></script>
+
 </body>
 
 </html>
