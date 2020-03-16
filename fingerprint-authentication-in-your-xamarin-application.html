@@ -349,7 +349,12 @@ private async void btnFPLogin_Clicked(object sender, EventArgs e)
 
                             <h3 class="text-dark" style="font-weight: 600">Let's run it!</h3><br>
 
-                            <img src="images/fingerprint/output.gif" style="width: 35%;" /><br><br>
+                            <picture>
+                                <source media="(min-width: 650px)" style="width: 35%;" srcset="images/fingerprint/output.gif">
+                                <source media="(min-width: 465px)" style="width: 50%;" srcset="images/fingerprint/output.gif">
+                                <img src="images/fingerprint/output.gif" style="width: 35%;" >
+                            </picture><br><br>
+
 
                             <h4 style="text-align: justify">
                                 Well, that's it on how to incorporate your device's fingerprint scanner into your
