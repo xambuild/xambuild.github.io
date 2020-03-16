@@ -10,21 +10,25 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Integrating Fingerprint Authentication in Your Xamarin.Forms Application</title>
-    <meta name="description" content="We're going to use a Xamarin Fingerprint Plugin that was written by Sven-Michael Stübe to incorporate fingerprint scanning to your Xamarin.Forms application ">
+    <meta name="description"
+        content="We're going to use a Xamarin Fingerprint Plugin that was written by Sven-Michael Stübe to incorporate fingerprint scanning to your Xamarin.Forms application ">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-    <meta property="og:url" content="https://xambuild.github.io/fingerprint-authentication-in-your-xamarin-application.html" />
+    <meta property="og:url"
+        content="https://xambuild.github.io/fingerprint-authentication-in-your-xamarin-application.html" />
     <meta property="og:type" content="blog" />
     <meta property="og:title" content="Integrating Fingerprint Authentication in Your Xamarin.Forms Application" />
-    <meta property="og:description" content="We're going to use a Xamarin Fingerprint Plugin that was written by Sven-Michael Stübe to incorporate fingerprint scanning to your Xamarin.Forms application." />
+    <meta property="og:description"
+        content="We're going to use a Xamarin Fingerprint Plugin that was written by Sven-Michael Stübe to incorporate fingerprint scanning to your Xamarin.Forms application." />
     <meta property="og:image" content="https://xambuild.github.io/images/fingerprint/cover.jpg" />
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.0/css/flag-icon.min.css">
 
     <link rel="stylesheet" href="assets/css/cs-skin-elastic.css">
@@ -40,7 +44,7 @@
         .gist {
             width: 580px !important;
         }
-        
+
         .gist-file .gist-data {
             max-height: 320px;
             max-width: 580px;
@@ -119,275 +123,245 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <h3 class="text-dark" style="font-weight: 600;">Integrating Fingerprint Authentication in Your Xamarin.Forms Application
+                        <h3 class="text-dark" style="font-weight: 600;">Integrating Fingerprint Authentication in Your
+                            Xamarin.Forms Application
                         </h3>
-                        <p style="color: black">by<a target="_blank" style="color: black" href="https://www.linkedin.com/in/cedric-gabrang"> Cedric Gabrang</a> • Mar 15th 2020</p>
+                        <p style="color: black">by<a target="_blank" style="color: black"
+                                href="https://www.linkedin.com/in/cedric-gabrang"> Cedric Gabrang</a> • Mar 17th 2020
+                        </p>
                         <br>
-                        <img height="auto" width="100%" style="max-width: 819px;" src="images/fingerprint/cover.jpg"><br><br>
+                        <img height="auto" width="100%" style="max-width: 819px;"
+                            src="images/fingerprint/cover.jpg"><br><br>
                         <div style="max-width: 870px;">
                             <h4 class="text-black" style="text-align: justify">
-                                Fingerprint scanners on mobile devices give applications with an alternative to the conventional username and password process of user authentication. The use of fingerprints to authenticate a user makes it possible for an application to incorporate security that is less intrusive than a username and password.
+                                Fingerprint scanners on mobile devices give applications with an alternative to the
+                                conventional username and password process of user authentication. The use of
+                                fingerprints to authenticate a user makes it possible for an application to incorporate
+                                security that is less intrusive than a username and password.
                             </h4><br>
 
-                            <h4 style="text-align: justify">Now, we're going to use a <a style="color:#039be5; text-decoration: underline;" href="https://www.nuget.org/packages/Plugin.Fingerprint/">Plugin.Fingerprint</a> that was written by Sven-Michael Stübe to incorporate fingerprint scanning to your Xamarin.Forms application. </h4>
-                            <br>
-                            <h4>Let's get started.</h4>
+                            <h3 class="text-dark" style="font-weight: 600">Requirements</h3><br>
+                            <h4 style="text-align: justify">Fingerprint Authentication requires Android 6.0 (API level
+                                23) or higher and a device with a fingerprint scanner.<br><br>
 
+                                A fingerprint must already be enrolled with the device for each user that is to be
+                                authenticated. This involves setting up a screen lock that uses a password, PIN, swipe
+                                pattern, or facial recognition.</h4>
                             <br><br>
 
-                            <h4 class="text-black" style="text-align: justify">
-                                I have the XAML file created and open already named <strong>LoginPage.xaml</strong>, it is a login screen for accepting a username and a password but what we want to do is to give users a choice of using fingerprint authentication instead.
-                            </h4><br>
-
-                            <picture>
-                                <source media="(min-width: 650px)" srcset="https://xambuild.github.io/images/fingerprint/1.png">
-                                <source media="(min-width: 465px)" srcset="https://xambuild.github.io/images/fingerprint/2.png">
-                                <img style="height: 100%" width="100%" src="https://xambuild.github.io/images/fingerprint/2.png">
-                            </picture><br><br>
-
-                            <h4 style="text-align: justify">By using the <strong>Azure Cosmos DB's API</strong> for MongoDB, you can enjoy the benefits of the MongoDB you're used to.</h4><br>
-
-                            <h3 class="text-dark" style="font-weight: 600">What is Azure Cosmos DB?</h3><br>
-                            <h4 style="text-align: justify">Azure Cosmos DB is a fully managed cloud database. With just a few clicks you can configure a database that is 100% compatible with the MongoDB. It implements wire protocols of common NoSQL databases. By providing a native
-                                implementation of the wire protocols directly and efficiently inside Cosmos DB, it allows existing client SDKs, drivers, and tools of the NoSQL databases to interact with Cosmos DB transparently. Despite the popularity
-                                of MongoDB for Node.js solution, a fully supported and maintained driver for .NET exists. The driver is implemented in .NET Standard which means it is compatible with multiple platforms, including Xamarin.</h4><br>
-
-                            <h3 class="text-dark" style="font-weight: 600">Set Up the Environment</h3><br>
-                            <h4>For this demo, our MongoDB will be hosted in Azure Cosmos DB. First, to get your instance of Azure Cosmos DB set up and ready to use, sign in your Microsoft account to <a style="text-decoration: blue underline; color: blue"
-                                    target="_blank" href="https://portal.azure.com">Azure Portal</a>. Go to <strong>Azure Cosmos DB</strong> blade and click on the <strong>Add</strong> button.</h4><br>
-                            <picture>
-                                <source media="(min-width: 650px)" srcset="https://xambuild.github.io/images/mongodb/1.PNG">
-                                <source media="(min-width: 465px)" srcset="https://xambuild.github.io/images/mongodb/1_1.PNG">
-                                <img style="height: 100%" width="100%" src="https://xambuild.github.io/images/mongodb/1_1.PNG">
-                            </picture><br><br>
-
-                            <h4>In the <strong>Create Azure Cosmos DB Account</strong> page, enter the settings for the new Azure Cosmos DB account. Select <strong>Review + Create</strong>. You can skip the <strong>Network</strong> and <strong>Tags</strong>                                section. The account creation takes a few minutes. </h4><br>
-                            <img style="height: 100%" width="95%" src="https://xambuild.github.io/images/mongodb/2.PNG"><br><br><br>
-
-                            <h3 class="text-dark" style="font-weight: 600">Connect to MongoDB</h3><br>
-                            <h4 style="text-align: justify">Next, our app needs to connect to the MongoDB. First, we have to obtain our connection string. In the left pane, click <strong>Connection String</strong>. The <strong>Connection String</strong> blade opens, it has all the information
-                                necessary to connect to the account by using a driver for MongoDB, including a preconstructed connection string.</h4><br>
-
-                            <img src="https://xambuild.github.io/images/mongodb/3.PNG" style="height: 100%; width: 95%"><br><br>
-
-                            <h3 class="text-dark" style="font-weight: 600">Let's create our app!</h3><br>
-
-                            <h4 style="text-align: justify"> The <strong>MongoDB.NET</strong> library enables the communication between Xamarin apps and the MongoDB. Search for <strong>MongoDB.Driver</strong> using the NuGet Package Manager in Visual Studio or Visual Studio for Mac and
-                                add that library to all of your projects.<br><br> Now, let's create our collection. On this demo, let's use Technical Event sessions as our sample collection. To do that, create a class and name it <strong>TechEventsModel</strong>                                and the following attributes:
-                            </h4><br>
-
-                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
-[BsonId, BsonRepresentation(BsonType.ObjectId)]
-public string Id { get; set; }
-
-[BsonElement("eventName")]
-public string Event { get; set; }
-
-[BsonElement("eventLocation")]
-public string Location { get; set; }
-
-[BsonElement("eventDateTime")]
-public string When { get; set; }</pre>
-
-                            <h4>The <code>[BsonId]</code> attribute specifies which property on the class should be used as the unique key or identifier for that document.</h4><br>
-
-                            <h4 style="text-align: justify">Next, let's create a <strong>ViewModel</strong> class named <strong>TechEventsViewModel</strong> and inherit the
-                                <code>INotifyPropertyChanged</code> interface. Initialize the following variables as indicated below:</h4><br>
-
-                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
-class TechEventsViewModel : INotifyPropertyChanged
-{
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    static IMongoCollection<TechEventsModel> mongoCollection;
-    readonly static string dbName = "BlogDemo";
-    readonly static string collectionName = "TechEvents";
-    static MongoClient client;
-
-    private List&lt;TechEventsModel&gt; _techEventsList;
-    private TechEventsModel _techEventItem;
-
-    private string _location, _event, _when;
-
-    protected virtual void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-}</pre>
-
-                            <h4 style="text-align: justify">To read and write documents, our app will use the <code>IMongoCollection&lt;T&gt;</code> class. Use the <code>MongoClient</code> object to obtain a reference to the <code>IMongoDatabase</code>.</h4><br>
-
-                            <h4 style="text-align: justify">Let's now set up our connection and create our database and collection. Create a public <code>IMongoCollection&lt;T&gt;</code> property named <strong>MongoConnection</strong>.</h4><br>
-                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
-public IMongoCollection<TechEventsModel> MongoConnection
-{
-    get
-    {
-        if (client == null || techEventsCollection == null)
-        {
-            var connectionString = "[PLACE YOUR CONNECTION STRING HERE]";
-            MongoClientSettings settings = MongoClientSettings.FromUrl(
-                new MongoUrl(connectionString));
-
-            settings.SslSettings = new SslSettings { EnabledSslProtocols = SslProtocols.Tls12 };
-
-            client = new MongoClient(settings);
-            var db = client.GetDatabase(dbName);
-
-            var collectionSettings = new MongoCollectionSettings { ReadPreference = ReadPreference.Nearest };
-            mongoCollection = db.GetCollection<TechEventsModel>(collectionName, collectionSettings);
-        }
-
-        return mongoCollection;
-    }
-}</pre>
-
-                            <h4 style="text-align: justify">Next, let's add the following properties.
-                            </h4><br>
-                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
-public string Event
-{
-    get { return _event; }
-    set
-    {
-    _event = value;
-    OnPropertyChanged("Event");
-    }
-}
-
-public string Location
-{
-    get { return _location; }
-    set
-    {
-    _location = value;
-    OnPropertyChanged("Location");
-    }
-}
-
-public string When
-{
-    get { return _when; }
-    set
-    {
-    _when = value;
-    OnPropertyChanged("When");
-    }
-}
-
-public List&lt;TechEventsModel&gt; TechEventsList
-{
-    get { return _techEventsList; }
-    set
-    {
-
-        _techEventsList = value;
-        OnPropertyChanged("TechEventsList");
-    }
-}</pre>
-                            <h4 style="text-align: justify">On the same class, create a method named <strong>GetAllTechEvents</strong>. To add every document in our collection list looks like the following:
-                            </h4><br>
-                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
-public async void GetAllTechEvents()
-{
-    var allEvents = await MongoConnection
-        .Find(new BsonDocument())
-        .ToListAsync();
-
-    TechEventsList = new List&lt;TechEventsModel&gt;();
-    TechEventsList.AddRange(allEvents);
-}</pre>
-
-                            <h4 style="text-align: justify">It is important to query asynchronously to avoid blocking the UI thread and provide a better user experience.</h4><br>
-
-                            <h4 style="text-align: justify">On the other hand, let's have the <strong>InsertTechEvent</strong> method. Inserting data looks like this:</h4><br>
-                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
-var items = new TechEventsModel
-{
-    Event = Event,
-    Location = Location,
-    When = When,
-};
-
-await MongoConnection.InsertOneAsync(items);
-await Application.Current.MainPage.Navigation.PopAsync();</pre>
-
-
-                            <h4 style="text-align: justify">For us to have atleast 1 collection before we proceed, go to <strong>GetAllTechEvents</strong> method and apply the changes as indicated below:
-                            </h4>
+                            <h3 class="text-dark" style="font-weight: 600">Let's get started.</h3>
 
                             <br>
+
+
+                            <h4 style="text-align: justify">Now, we're going to use a <a
+                                    style="color:#039be5; text-decoration: underline;"
+                                    href="https://www.nuget.org/packages/Plugin.Fingerprint/">Plugin.Fingerprint</a>
+                                that was written by <strong>Sven-Michael Stübe</strong> to incorporate fingerprint
+                                scanning to your Xamarin.Forms application. </h4>
+                            <br>
+
+                            <h4 class="text-black" style="text-align: justify">
+                                I have the XAML file created and open already named <strong>LoginPage.xaml</strong>,
+                                it is a login screen for accepting a username and a password but what we want to do is
+                                to give users a choice of using fingerprint authentication instead.
+                            </h4><br>
+
+                            <picture>
+                                <source media="(min-width: 650px)"
+                                    srcset="https://xambuild.github.io/images/fingerprint/1.png">
+                                <source media="(min-width: 465px)"
+                                    srcset="https://xambuild.github.io/images/fingerprint/2.png">
+                                <img style="height: 100%" width="100%"
+                                    src="https://xambuild.github.io/images/fingerprint/2.png">
+                            </picture><br><br><br>
+
+                            <h3 class="text-dark" style="font-weight: 600">Install Packages</h3><br>
+
+                            <h4 style="text-align: justify">Let's start by adding the plug-in. Right-click on the
+                                solution then select Manage NuGet Packages for Solution. Search for
+                                <strong>Plugin.Fingerprint</strong> and install it in all of your projects.</h4><br>
+
+                            <img style="height: 100%" width="95%" src="images/fingerprint/3.png"><br><br>
+
+                            <h4>The next plug-in that we're going to use here is <strong>James Montemagno's </strong><a
+                                    style="color:#039be5; text-decoration: underline;"
+                                    href="https://www.nuget.org/packages/Plugin.CurrentActivity/">Plugin.CurrentActivity</a>.
+                                Search for it then install it in your Android project only.</h4><br>
+
+                            <img style="height: 100%" width="95%" src="images/fingerprint/4.png"><br><br><br>
+
+                            <h3 class="text-dark" style="font-weight: 600">Android Setup</h3><br>
+                            <h4 style="text-align: justify">Go to your Android project and we have a few more things we
+                                need to for Android. First of all we have to go into the
+                                <strong>AndroidManifest</strong> and we need tell it that we're going to use
+                                fingerprint.</h4><br>
+
+                            <img style="height: 100%" width="65%" src="images/fingerprint/5.png"><br><br>
+
+                            <h4 style="text-align: justify">Next, open the <strong>MainActivity.cs</strong> and let's
+                                add an activity resolver for our <strong>CrossFingerPrint</strong>.</h4><br>
+
                             <pre class="prettyprint" style="word-break: break-all; padding: 5px">
-public async void GetAllTechEvents()
+protected override void OnCreate(Bundle savedInstanceState)
 {
-    var allEvents = await MongoConnection
-        .Find(new BsonDocument())
-        .ToListAsync();
+    TabLayoutResource = Resource.Layout.Tabbar;
+    ToolbarResource = Resource.Layout.Toolbar;
 
-        if (allEvents.Count == 0)
-        {
-            var items = new TechEventsModel
-            {
-                Event = "MONDPH Xamarin Workshop",
-                Location = "Microsoft Partners Philippines",
-                When = "08/31/2019"
-            };
+    base.OnCreate(savedInstanceState);
 
-            await MongoConnection.InsertOneAsync(items);
+    CrossFingerprint.SetCurrentActivityResolver(() => this);
 
-            allEvents = await MongoConnection
-            .Find(new BsonDocument())
-            .ToListAsync();
-        }
+    Xamarin.Essentials.Platform.Init(this, savedInstanceState);
+    global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+    LoadApplication(new App());
+}</pre><br>
 
-    TechEventsList = new List<TechEventsModel>();
-    TechEventsList.AddRange(allEvents);
+                            <h3 class="text-dark" style="font-weight: 600">Modify the LoginPage</h3><br>
+
+                            <h4 style="text-align: justify">Now that we have all of that successfully added, let's add
+                                our button and we'll call it <strong>btnFPLogin</strong> and we'll say the text
+                                <strong>Login using fingerprint.</strong></h4><br>
+
+                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;ContentPage
+    x:Class="FingerprintSample.Views.LoginPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"&gt;
+    &lt;ContentPage.Content&gt;
+        &lt;StackLayout Padding="16" Spacing="0"&gt;
+
+            &lt;Label Text="Username:" /&gt;
+            &lt;Entry x:Name="entryUserName" Keyboard="Email" /&gt;
+
+            &lt;Label Text="Password:" /&gt;
+            &lt;Entry x:Name="entryPassword" IsPassword="True" /&gt;
+
+            &lt;Button x:Name="btnLogin" Text="Login to Existing Account" /&gt;
+            &lt;Button x:Name="btnFPLogin" Text="Login using Fingerprint" /&gt;
+
+        &lt;/StackLayout&gt;
+    &lt;/ContentPage.Content&gt;
+&lt;/ContentPage&gt;</pre>
+
+
+
+                            <h4 style="text-align: justify">Let's save it and go to our codebehind.</h4><br>
+
+                            <h4 style="text-align: justify">Now, the first thing we want to do here is to create an
+                                event method for our new button. We're going to be awaiting some calls in here so we're
+                                going to make that async. </h4><br>
+
+                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
+private async void btnFPLogin_Clicked(object sender, EventArgs e)
+{
+    
 }</pre>
 
-                            <h4 style="text-align: justify">All MongoDB services seems ready, let's have these services in use by creating a page to display the Tech Events collections list. Create a<strong> ContentPage</strong> named <strong>TechEventsListPage</strong>. Our page should
-                                like this:</h4><br>
+                            <h4 style="text-align: justify">Once we're done, we can now assign it as the button clicked
+                                event in our XAML page.</h4><br>
 
                             <pre class="prettyprint" style="word-break: break-all; padding: 5px">
-&lt;ContentPage.Content&gt;
-    &lt;ListView ItemsSource="{Binding TechEventsList}"
-        CachingStrategy="RecycleElement"&gt;
-        &lt;ListView.ItemTemplate&gt;
-            &lt;DataTemplate&gt;
-                &lt;TextCell Text="{Binding Event}" Detail="{Binding Location}"&gt;
-                &lt;/TextCell&gt;
-            &lt;/DataTemplate&gt;
-        &lt;/ListView.ItemTemplate&gt;
-    &lt;/ListView&gt;
-&lt;/ContentPage.Content&gt;
-</pre>
+&lt;Button x:Name="btnFPLogin" Clicked="btnFPLogin_Clicked" Text="Login using Fingerprint" /&gt;</pre><br>
 
-                            <h4 style="text-align: justify">Let's indicate our <strong>BindingContext</strong> in our <strong>TechEventsListPage.cs</strong></h4><br>
+                            <h3 class="text-dark" style="font-weight: 600">Check Device's Fingerprint Availability</h3>
+                            <br>
+
+                            <h4 style="text-align: justify">The first thing we want to do is to make sure to see if our
+                                fingerprint is even available on the device and if it is we can try to authenticate.
+                                Don't forget to reference first the <strong><code>Plugin.Fingerprint</code></strong>.
+                            </h4><br>
                             <pre class="prettyprint" style="word-break: break-all; padding: 5px">
-protected override void OnAppearing()
+private async void btnFPLogin_Clicked(object sender, EventArgs e)
 {
-    base.OnAppearing();
-    BindingContext = new TechEventsViewModel();
+    var result = await CrossFingerprint.Current.IsAvailableAsync();
+
+    if (result) 
+    {
+        
+    }
+}</pre>
+
+                            <h4 style="text-align: justify">If the fingerprint is available then we're going to go ahead
+                                and and do the rest of it where we're going to authenticate it. But first, let's have
+                                <strong><code>AuthenticationRequestConfiguration</code></strong> for the fingerprint
+                                dialog configuration.</h4><br>
+                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
+private async void btnFPLogin_Clicked(object sender, EventArgs e)
+{
+    var result = await CrossFingerprint.Current.IsAvailableAsync();
+
+    if (result) 
+    {
+        var dialogConfig = new AuthenticationRequestConfiguration
+        ("Login using fingerprint", "Confirm login with your fingerprint")
+        {
+            FallbackTitle = "Use Password",
+            AllowAlternativeAuthentication = true,
+        };
+    }
+}</pre>
+                            <h4 style="text-align: justify">We're setting the
+                                <strong><code>AllowAlternativeAuthentication</code></strong> to
+                                <strong><code>true</code></strong> if we want it to fall back to using a pin.Then the
+                                <strong><code>FallbackTitle</code></strong> here is we're just giving it a title like
+                                "Use Password".</h4><br><br>
+
+                            <h4 style="text-align: justify">Now, if we are authenticated, we're going to set up the way
+                                to what we want once the fingerprint was accepted. For this instance, we're going to
+                                set up the app's MainPage, otherwise, we'll just display an alert to indicate failed
+                                authentication.</h4><br>
+
+                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
+private async void btnFPLogin_Clicked(object sender, EventArgs e)
+{
+    var result = await CrossFingerprint.Current.IsAvailableAsync();
+
+    if (result) 
+    {
+        var dialogConfig = new AuthenticationRequestConfiguration
+        ("Login using fingerprint", "Confirm login with your fingerprint")
+        {
+            FallbackTitle = "Use Password",
+            AllowAlternativeAuthentication = true,
+        };
+
+        var auth = await CrossFingerprint.Current.AuthenticateAsync(dialogConfig);
+        if (auth.Authenticated) 
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                Application.Current.MainPage = new MainPage();
+            });
+            
+        }
+        else 
+        {
+            await DisplayAlert("Authentication Failed", "Fingerprint authentication failed", "CLOSE");
+        }
+    }
 }</pre><br>
+
 
                             <h3 class="text-dark" style="font-weight: 600">Let's run it!</h3><br>
 
-                            <picture>
-                                <source media="(min-width: 650px)" style="max-width: 250px;" srcset="images/mongodb/Screenshot_20190831-164631.jpg">
-                                <source media="(min-width: 465px)" style="max-width: 150px;" srcset="images/mongodb/Screenshot_20190831-164631.jpg">
-                                <img src="images/mongodb/Screenshot_20190831-164631.jpg" style="height: auto;max-width: 250px;">
-                            </picture><br><br>
-
-                            <h4 style="text-align: justify">As you've noticed, we just simply fetched the collection from Azure Cosmos DB. Now, let's take a look on how it was saved.</h4><br><br>
-
-                            <img src="images/mongodb/techevents_collection.PNG" style="height: auto;"><br><br>
+                            <img src="images/fingerprint/output.gif" style="width: 35%;" /><br><br>
 
                             <h4 style="text-align: justify">
-                                Well, that's it on how to begin with using MongoDB and Azure Cosmos DB as your Xamarin app database. To learn more about Azure Cosmos DB APIs, you can find all of the code of our demo app in this GitHub repo: <a href="https://github.com/cedricgabrang/AzureCosmosDB"
+                                Well, that's it on how to incorporate your device's fingerprint scanner into your
+                                Xamarin.Forms
+                                app. Try it in your own, you can find all of the code of
+                                our demo app in this GitHub repo: <br><a
+                                    href="https://github.com/xambuild/PluginFingerprintSample"
                                     style="font-family: 'Courier New', Courier, monospace; word-break: break-all; color: #f9690e">
-                                    https://github.com/cedricgabrang/AzureCosmosDB
-                                    </a>
+                                    https://github.com/xambuild/PluginFingerprintSample
+                                </a>
                             </h4>
-                            <br><br>
+                            <br>
                             <h4 style="text-align: justify">Until next time! Happy Xamarin coding!</h4>
 
                         </div>
