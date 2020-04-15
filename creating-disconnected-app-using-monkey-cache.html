@@ -138,20 +138,23 @@
                                 entered it to the application, you need to save that data.<br><br>
                                 If you are looking to accomplish to make a <strong> web request</strong>, save the
                                 result <strong>locally</strong>, and
-                                have it expire after a given amount of time, that is basically what we called
+                                have it <strong>expire</strong> after a given amount of time, that is basically what we
+                                called
                                 <strong>caching</strong>.<br><br>
                                 There are a lot of great solutions out there to cache data, but if you are looking for a
                                 <strong>minimal amount of dependencies</strong>, you're on the right page,
-                                mate!.<br><br>
-                                In this article, I’m going to show you how to do data caching by using the Monkey Cache
-                                library by James Montemagno.
+                                mate!<br><br>
+                                In this article, I’m going to show you how to do data caching by using the <a
+                                    style="color:#039be5; text-decoration: underline;"
+                                    href="https://www.nuget.org/packages/MonkeyCache/">Monkey Cache</a> library by James
+                                Montemagno.
                             </h4><br><br>
 
                             <h3 class="text-dark" style="font-weight: 600">What is Monkey Cache?</h3><br>
-                            <h4 style="text-align: justify">The easiest way to cache data in any .NET application and
-                                the goal of Monkey Cache is to enable developers to easily cache any data for a limited
-                                amount of time. That's right, any data, which means you can store primitive data or
-                                structured data.</h4>
+                            <h4 style="text-align: justify">Monkey Cache enables you to easily store any type of data or
+                                just a simple string that you can easily serialize and deserialize back and forth. The
+                                key here is that you can set an expiration data associated with that data. So you can
+                                say this data should be used for the next few days.</h4>
                             <br>
 
                             <h3 class="text-dark" style="font-weight: 600">Installing Monkey Cache</h3>
@@ -161,7 +164,7 @@
 
                             <h4 style="text-align: justify">Monkey Cache consists of one core NuGet package
                                 (MonkeyCache) with three backing store providers. You can choose the backend that best
-                                fits your needs and application</h4>
+                                fits your needs.</h4>
                             <br>
 
 
@@ -172,188 +175,86 @@
                                 your application, you may already have SQLite or LiteDB installed so these would be your
                                 natural choice.</h4><br>
 
-                            <img style="height: 100%" width="95%" src="images/fingerprint/3.png"><br><br>
+                            <h3 class="text-dark" style="font-weight: 600">Setup</h3><br>
+                            <h4 style="text-align: justify">Once Monkey Cache is installed in your project, it is time
+                                to start storing objects.<br><br>
+                                Before calling any method, it is required that you set an <code
+                                    style="font-size : large;">ApplicationId</code> for
+                                your
+                                application so a folder is created specifically for your app on disk. This can be done
+                                with a static string:</h4><br>
 
-                            <h4>The next plug-in that we're going to use here is <strong>James Montemagno's </strong><a
-                                    style="color:#039be5; text-decoration: underline;"
-                                    href="https://www.nuget.org/packages/Plugin.CurrentActivity/">Plugin.CurrentActivity</a>.
-                                Search for it then install it in your Android project only.</h4><br>
-
-                            <img style="height: 100%" width="95%" src="images/fingerprint/4.png"><br><br><br>
-
-                            <h3 class="text-dark" style="font-weight: 600">Android Setup</h3><br>
-                            <h4 style="text-align: justify">Go to your Android project and we have a few more things we
-                                need to for Android. First of all we have to go into the
-                                <strong>AndroidManifest</strong> and we need tell it that we're going to use
-                                fingerprint.</h4><br>
-
-                            <img style="height: 100%" width="65%" src="images/fingerprint/5.png"><br><br>
-
-                            <h4 style="text-align: justify">Next, open the <strong>MainActivity.cs</strong> and let's
-                                add an activity resolver for our <strong>CrossFingerPrint</strong>.</h4><br>
 
                             <pre class="prettyprint" style="word-break: break-all; padding: 5px">
-protected override void OnCreate(Bundle savedInstanceState)
+Barrel.ApplicationId = "your_unique_name_here";</pre><br>
+
+                            <h3 class="text-dark" style="font-weight: 600">Caching a Web Request</h3><br>
+
+                            <h4 style="text-align: justify">Let's have a web request and we get some
+                                <code style="font-size : large;">json</code> response from the server. What we want is
+                                the ability to cache this
+                                data incase the app
+                                goes offline, but also we need it to expire after 24 hours.</h4><br>
+
+                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
+static readonly HttpClient httpClient = new HttpClient();
+
+public async Task<IEnumerable<Jokes>> GetRandomJokesAsync()
 {
-    TabLayoutResource = Resource.Layout.Tabbar;
-    ToolbarResource = Resource.Layout.Toolbar;
+    var endpoint = string.Format("https://official-joke-api.appspot.com/jokes/programming/ten");
 
-    base.OnCreate(savedInstanceState);
+    if(Connectivity.NetworkAccess == NetworkAccess.Internet) 
+    {
+        HttpResponseMessage httpResponse = await httpClient.GetAsync(endpoint);
+        string httpResult = httpResponse.Content.ReadAsStringAsync().Result;
+        var httpData = JsonConvert.DeserializeObject<IEnumerable<Jokes>>(httpResult);
+        Barrel.Current.Empty(endpoint);
+        Barrel.Current.Add(key: endpoint, data: httpData, TimeSpan.FromDays(1));
+        return httpData;
+    }
 
-    CrossFingerprint.SetCurrentActivityResolver(() => this);
-
-    Xamarin.Essentials.Platform.Init(this, savedInstanceState);
-    global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-    LoadApplication(new App());
-}</pre><br>
-
-                            <h3 class="text-dark" style="font-weight: 600">Modify the LoginPage</h3><br>
-
-                            <h4 style="text-align: justify">Now that we have all of that successfully added, let's add
-                                our button and we'll call it <strong>btnFPLogin</strong> and we'll say the text
-                                <strong>Login using fingerprint.</strong></h4><br>
-
-                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
-&lt;?xml version="1.0" encoding="utf-8" ?&gt;
-&lt;ContentPage
-    x:Class="FingerprintSample.Views.LoginPage"
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"&gt;
-    &lt;ContentPage.Content&gt;
-        &lt;StackLayout Padding="16" Spacing="0"&gt;
-
-            &lt;Label Text="Username:" /&gt;
-            &lt;Entry x:Name="entryUserName" Keyboard="Email" /&gt;
-
-            &lt;Label Text="Password:" /&gt;
-            &lt;Entry x:Name="entryPassword" IsPassword="True" /&gt;
-
-            &lt;Button x:Name="btnLogin" Text="Login to Existing Account" /&gt;
-            &lt;Button x:Name="btnFPLogin" Text="Login using Fingerprint" /&gt;
-
-        &lt;/StackLayout&gt;
-    &lt;/ContentPage.Content&gt;
-&lt;/ContentPage&gt;</pre>
-
-
-
-                            <h4 style="text-align: justify">Let's save it and go to our codebehind.</h4><br>
-
-                            <h4 style="text-align: justify">Now, the first thing we want to do here is to create an
-                                event method for our new button. We're going to be awaiting some calls in here so we're
-                                going to make that async. </h4><br>
-
-                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
-private async void btnFPLogin_Clicked(object sender, EventArgs e)
-{
-    
+    else 
+    {
+        return Barrel.Current.Get<IEnumerable<Jokes>>(endpoint);
+    }
 }</pre>
 
-                            <h4 style="text-align: justify">Once we're done, we can now assign it as the button clicked
-                                event in our XAML page.</h4><br>
 
-                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
-&lt;Button x:Name="btnFPLogin" Clicked="btnFPLogin_Clicked" Text="Login using Fingerprint" /&gt;</pre><br>
+                            <h4 style="text-align: justify">The <code style="font-size: large;">Add</code> method (which
+                                also updates the item) takes in a
+                                unique key, some data, and a time span</h4><br><br>
 
-                            <h3 class="text-dark" style="font-weight: 600">Check Device's Fingerprint Availability</h3>
+                            <h3 class="text-dark" style="font-weight: 600">Demo</h3>
                             <br>
 
-                            <h4 style="text-align: justify">The first thing we want to do is to make sure to see if our
-                                fingerprint is even available on the device and if it is we can try to authenticate.
-                                Don't forget to reference first the <strong><code>Plugin.Fingerprint</code></strong>.
+                            <h4 style="text-align: justify"><strong>WITHOUT Monkey Cache</strong> - as you can see right
+                                here, the app is
+                                prone to crashing and seems like an empty screen except a message "Network error.
+                                Please check your connection". </h4>
                             </h4><br>
-                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
-private async void btnFPLogin_Clicked(object sender, EventArgs e)
-{
-    var result = await CrossFingerprint.Current.IsAvailableAsync();
 
-    if (result) 
-    {
-        
-    }
-}</pre>
+                            <a href="https://raw.githubusercontent.com/xambuild/xambuild.github.io/master/images/caching/before.gif"
+                                target="_blank"><img src="images/caching/before.gif"
+                                    style="width: 45%;" /></a><br><br><br>
 
-                            <h4 style="text-align: justify">If the fingerprint is available then we're going to go ahead
-                                and and do the rest of it where we're going to authenticate it. But first, let's have
-                                <strong><code>AuthenticationRequestConfiguration</code></strong> for the fingerprint
-                                dialog configuration.</h4><br>
-                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
-private async void btnFPLogin_Clicked(object sender, EventArgs e)
-{
-    var result = await CrossFingerprint.Current.IsAvailableAsync();
+                            <h4 style="text-align: justify"><strong>WITH Monkey Cache</strong> - Won’t it be a better
+                                user experience if you could see the latest data cached?</h4>
+                            </h4><br>
 
-    if (result) 
-    {
-        var dialogConfig = new AuthenticationRequestConfiguration
-        ("Login using fingerprint", "Confirm login with your fingerprint")
-        {
-            FallbackTitle = "Use Password",
-            AllowAlternativeAuthentication = true,
-        };
-    }
-}</pre>
-                            <h4 style="text-align: justify">We're setting the
-                                <strong><code>AllowAlternativeAuthentication</code></strong> to
-                                <strong><code>true</code></strong> if we want it to fall back to using a pin.Then the
-                                <strong><code>FallbackTitle</code></strong> here is we're just giving it a title like
-                                "Use Password".</h4><br><br>
+                            <a href="https://raw.githubusercontent.com/xambuild/xambuild.github.io/master/images/caching/after.gif"
+                                target="_blank"><img src="images/caching/after.gif"
+                                    style="width: 45%;" /></a><br><br><br>
 
-                            <h4 style="text-align: justify">Now, if we are authenticated, we're going to set up the way
-                                to what we want once the fingerprint was accepted. For this instance, we're going to
-                                set up the app's MainPage, otherwise, we'll just display an alert to indicate failed
-                                authentication.</h4><br>
-
-                            <pre class="prettyprint" style="word-break: break-all; padding: 5px">
-private async void btnFPLogin_Clicked(object sender, EventArgs e)
-{
-    var result = await CrossFingerprint.Current.IsAvailableAsync();
-
-    if (result) 
-    {
-        var dialogConfig = new AuthenticationRequestConfiguration
-        ("Login using fingerprint", "Confirm login with your fingerprint")
-        {
-            FallbackTitle = "Use Password",
-            AllowAlternativeAuthentication = true,
-        };
-
-        var auth = await CrossFingerprint.Current.AuthenticateAsync(dialogConfig);
-        if (auth.Authenticated) 
-        {
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                Application.Current.MainPage = new MainPage();
-            });
-            
-        }
-        else 
-        {
-            await DisplayAlert("Authentication Failed", "Fingerprint authentication failed", "CLOSE");
-        }
-    }
-}</pre><br>
-
-
-                            <h3 class="text-dark" style="font-weight: 600">Let's run it!</h3><br>
-
-                            <a href="https://raw.githubusercontent.com/xambuild/xambuild.github.io/master/images/fingerprint/output.gif"
-                                target="_blank"><img src="images/fingerprint/output.gif"
-                                    style="width: 45%;" /></a><br><br>
-
-                            <h4 style="text-align: justify">
-                                Well, that's it on how to incorporate your device's fingerprint scanner into your
-                                Xamarin.Forms
-                                app. Try it in your own, you can find all of the code of
-                                our demo app in this GitHub repo: <br><a
-                                    href="https://github.com/xambuild/PluginFingerprintSample"
+                            <h4 style="text-align: justify">There you have it! No need to re-structure your entire app!
+                                Now all of your web requests
+                                will be cached for any amount of time and you can integrate Monkey Cache into your
+                                existing source code without any modifications to your network code.<br><br> Try it in your own,
+                                you can find all of the code of
+                                our demo app in this GitHub repo <a href="https://github.com/xambuild/MonkeyCacheDemo"
                                     style="font-family: 'Courier New', Courier, monospace; word-break: break-all; color: #f9690e">
-                                    https://github.com/xambuild/PluginFingerprintSample
-                                </a>
-                            </h4>
-                            <br>
+                                    here
+                                </a>.</h4><br>
+
                             <h4 style="text-align: justify">Until next time! Happy Xamarin coding!</h4>
 
                         </div>
